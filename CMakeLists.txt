@@ -4,6 +4,21 @@ include_directories(include)
 file(GLOB headers include/andres/* include/andres/ml/*)
 
 ##############################################################################
+# Gnu g++ specific commands
+##############################################################################
+if(CMAKE_COMPILER_IS_GNUCXX)
+   set(ENABLE_CXX11 "-std=c++11")
+   execute_process(
+       COMMAND "${CMAKE_CXX_COMPILER} -dumpversion"
+       OUTPUT_VARIABLE GCC_VERSION
+   )
+   if(GCC_VERSION VERSION_LESS 4.7)
+      set(ENABLE_CXX11 "-std=c++0x")
+   endif()
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ENABLE_CXX11}")
+endif()
+
+##############################################################################
 # Doxygen
 ##############################################################################
 find_package(Doxygen QUIET)
